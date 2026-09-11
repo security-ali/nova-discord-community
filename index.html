@@ -4,10 +4,623 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova - سيرفر ديسكورد المميز</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #7c3aed;
+            box-shadow: 0 8px 32px rgba(124, 58, 237, 0.2);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #7c3aed;
+            object-fit: cover;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: #7c3aed;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #7c3aed, #ec4899);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .dashboard-btn {
+            background: linear-gradient(135deg, #7c3aed, #ec4899) !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white !important;
+            transition: all 0.3s;
+        }
+
+        .dashboard-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 60px;
+            padding: 100px 0;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed, #ec4899, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(124, 58, 237, 0.2);
+            color: #7c3aed;
+            border: 2px solid #7c3aed;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(124, 58, 237, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .hero-image {
+            text-align: center;
+        }
+
+        .hero-img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            border: 3px solid #7c3aed;
+            box-shadow: 0 20px 60px rgba(124, 58, 237, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 48px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Games Section */
+        .games {
+            padding: 100px 0;
+            background: linear-gradient(180deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
+            border-radius: 20px;
+            margin: 80px 0;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(236, 72, 153, 0.1));
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: #7c3aed;
+            box-shadow: 0 20px 50px rgba(124, 58, 237, 0.3);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(236, 72, 153, 0.2));
+        }
+
+        .game-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .game-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .game-card p {
+            color: #a0a0a0;
+            margin-bottom: 20px;
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Management Section */
+        .management {
+            padding: 100px 0;
+        }
+
+        .management-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .management-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(236, 72, 153, 0.1));
+            padding: 35px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid rgba(124, 58, 237, 0.2);
+            transition: all 0.3s;
+        }
+
+        .management-card:hover {
+            transform: translateY(-8px);
+            border-color: #7c3aed;
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.25);
+        }
+
+        .management-card i {
+            font-size: 40px;
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+
+        .management-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .management-card p {
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+
+        /* Events Section */
+        .events {
+            padding: 100px 0;
+            background: linear-gradient(180deg, rgba(236, 72, 153, 0.1) 0%, transparent 100%);
+            margin: 80px 0;
+            border-radius: 20px;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .event-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.1));
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .event-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 50px rgba(124, 58, 237, 0.4);
+        }
+
+        .event-header {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            padding: 20px;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+        }
+
+        .event-body {
+            padding: 25px;
+        }
+
+        .event-body p {
+            color: #a0a0a0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-body i {
+            color: #7c3aed;
+            width: 20px;
+        }
+
+        .event-btn {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-top: 15px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .event-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Roles Section */
+        .roles {
+            padding: 100px 0;
+        }
+
+        .roles-table {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(124, 58, 237, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(124, 58, 237, 0.3);
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+        }
+
+        table th {
+            padding: 20px;
+            text-align: right;
+            font-weight: 700;
+            color: white;
+        }
+
+        table td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+            color: #e0e0e0;
+        }
+
+        table tbody tr:hover {
+            background: rgba(124, 58, 237, 0.15);
+        }
+
+        .role-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .role-badge.admin {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+        }
+
+        .role-badge.moderator {
+            background: rgba(236, 72, 153, 0.3);
+            color: #ec4899;
+        }
+
+        .role-badge.submoderator {
+            background: rgba(6, 182, 212, 0.3);
+            color: #06b6d4;
+        }
+
+        .role-badge.vip {
+            background: rgba(251, 146, 60, 0.3);
+            color: #fb923c;
+        }
+
+        .role-badge.member {
+            background: rgba(168, 85, 247, 0.3);
+            color: #a855f7;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.1));
+            margin: 80px 0;
+            border-radius: 20px;
+        }
+
+        .stats .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .stat-card h3 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            font-size: 18px;
+            color: #a0a0a0;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(15, 15, 35, 0.95);
+            border-top: 2px solid #7c3aed;
+            padding: 60px 0 20px;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: #7c3aed;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #7c3aed;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(124, 58, 237, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(124, 58, 237, 0.2);
+            color: #707070;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 60px 0;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .nav-menu {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .nav-menu a {
+                font-size: 14px;
+            }
+
+            .dashboard-btn {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .games-grid, .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ec4899, #7c3aed);
+        }
+    </style>
 </head>
-<body dir="rtl">
+<body>
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="container">
@@ -21,7 +634,7 @@
                 <li><a href="#management">الإدارة</a></li>
                 <li><a href="#events">الفعاليات</a></li>
                 <li><a href="#roles">الأدوار</a></li>
-                <li><a href="dashboard.html" class="dashboard-btn"><i class="fas fa-arrow-left"></i> لوحة التحكم</a></li>
+                <li><a href="#" class="dashboard-btn"><i class="fas fa-arrow-left"></i> لوحة التحكم</a></li>
             </ul>
         </div>
     </nav>
@@ -30,7 +643,7 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <h1 class="hero-title">مرحباً بك في <span class="gradient-text">Nova</span></h1>
-            <p class="hero-subtitle">أفضل سيرفر ديسكورد عربي للألعاب والمرح والمجتمع</p>
+            <p class="hero-subtitle">🚀 أفضل سيرفر ديسكورد عربي للألعاب والمرح والمجتمع الممتع</p>
             <div class="hero-buttons">
                 <a href="https://discord.gg/nova" class="btn btn-primary"><i class="fab fa-discord"></i> انضم الآن</a>
                 <a href="#games" class="btn btn-secondary"><i class="fas fa-gamepad"></i> استكشف الألعاب</a>
@@ -44,53 +657,42 @@
     <!-- Games Section -->
     <section id="games" class="games">
         <div class="container">
-            <h2 class="section-title">الألعاب المتاحة</h2>
+            <h2 class="section-title">🎮 الألعاب المتاحة</h2>
             <div class="games-grid">
-                <!-- PUBG -->
                 <div class="game-card">
                     <div class="game-icon">🎮</div>
                     <h3>PUBG</h3>
-                    <p>لعبة البقاء - انضم لفريقك وفز بالمعركة</p>
+                    <p>لعبة البقاء - انضم لفريقك وفز بالمعركة الملحمية</p>
                     <a href="#" class="game-btn">انضم للاعبين</a>
                 </div>
-
-                <!-- Among Us -->
                 <div class="game-card">
                     <div class="game-icon">👾</div>
                     <h3>Among Us</h3>
-                    <p>لعبة اجتماعية - اكتشف المحتالين</p>
+                    <p>لعبة اجتماعية - اكتشف المحتالين بذكاء</p>
                     <a href="#" class="game-btn">ابدأ لعبة</a>
                 </div>
-
-                <!-- Fortnite -->
                 <div class="game-card">
                     <div class="game-icon">🏗️</div>
                     <h3>Fortnite</h3>
-                    <p>بناء وقتال - كن آخر من يبقى</p>
+                    <p>بناء وقتال - كن آخر من يبقى واحصل على النصر</p>
                     <a href="#" class="game-btn">الانضمام الآن</a>
                 </div>
-
-                <!-- Minecraft -->
                 <div class="game-card">
                     <div class="game-icon">⛏️</div>
                     <h3>Minecraft</h3>
-                    <p>الإبداع اللامحدود - ابنِ عالمك</p>
+                    <p>الإبداع اللامحدود - ابنِ عالمك الخاص</p>
                     <a href="#" class="game-btn">استكشف السيرفر</a>
                 </div>
-
-                <!-- Valorant -->
                 <div class="game-card">
                     <div class="game-icon">🎯</div>
                     <h3>Valorant</h3>
-                    <p>إطلاق النار التكتيكي - انضم لفريقك</p>
+                    <p>إطلاق النار التكتيكي - انضم لفريقك المفضل</p>
                     <a href="#" class="game-btn">تمرن معنا</a>
                 </div>
-
-                <!-- Call of Duty -->
                 <div class="game-card">
                     <div class="game-icon">💥</div>
                     <h3>Call of Duty</h3>
-                    <p>أكشن مكثف - سيطر على الساحة</p>
+                    <p>أكشن مكثف - سيطر على الساحة والحرب</p>
                     <a href="#" class="game-btn">الحرب الآن</a>
                 </div>
             </div>
@@ -100,12 +702,12 @@
     <!-- Management System -->
     <section id="management" class="management">
         <div class="container">
-            <h2 class="section-title">نظام الإدارة</h2>
+            <h2 class="section-title">👑 نظام الإدارة والرتب</h2>
             <div class="management-content">
                 <div class="management-card">
                     <i class="fas fa-crown"></i>
                     <h3>المديرين</h3>
-                    <p>يسيرون السيرفر بشكل كامل ولهم صلاحيات كاملة</p>
+                    <p>يسيرون السيرفر بشكل كامل ولهم صلاحيات كاملة مطلقة</p>
                 </div>
                 <div class="management-card">
                     <i class="fas fa-shield-alt"></i>
@@ -115,12 +717,12 @@
                 <div class="management-card">
                     <i class="fas fa-medal"></i>
                     <h3>المشرفين الفرعيين</h3>
-                    <p>يساعدون في إدارة المشاريع والفعاليات</p>
+                    <p>يساعدون في إدارة المشاريع والفعاليات المميزة</p>
                 </div>
                 <div class="management-card">
                     <i class="fas fa-star"></i>
                     <h3>الأعضاء المميزين</h3>
-                    <p>أعضاء نشيطين وملتزمين بقيم السيرفر</p>
+                    <p>أعضاء نشيطين وملتزمين بقيم السيرفر العالية</p>
                 </div>
             </div>
         </div>
@@ -129,44 +731,41 @@
     <!-- Events Section -->
     <section id="events" class="events">
         <div class="container">
-            <h2 class="section-title">الفعاليات والمسابقات</h2>
+            <h2 class="section-title">🎉 الفعاليات والمسابقات</h2>
             <div class="events-grid">
                 <div class="event-card">
-                    <div class="event-header">مسابقة PUBG</div>
+                    <div class="event-header">🏆 مسابقة PUBG الكبرى</div>
                     <div class="event-body">
-                        <p><i class="fas fa-calendar"></i> كل جمعة</p>
-                        <p><i class="fas fa-trophy"></i> جوائز حصرية</p>
-                        <p><i class="fas fa-users"></i> مشاركة جماعية</p>
+                        <p><i class="fas fa-calendar-alt"></i> كل جمعة الساعة 8 مساءً</p>
+                        <p><i class="fas fa-trophy"></i> جوائز حصرية وأموال</p>
+                        <p><i class="fas fa-users"></i> مشاركة جماعية عائلية</p>
                     </div>
                     <a href="#" class="event-btn">سجل الآن</a>
                 </div>
-
                 <div class="event-card">
-                    <div class="event-header">ليلة الضحك</div>
+                    <div class="event-header">😂 ليلة الضحك والفرفشة</div>
                     <div class="event-body">
-                        <p><i class="fas fa-calendar"></i> كل ثلاثاء</p>
-                        <p><i class="fas fa-laugh"></i> محتوى مضحك</p>
-                        <p><i class="fas fa-microphone"></i> بث مباشر</p>
+                        <p><i class="fas fa-calendar-alt"></i> كل ثلاثاء الساعة 10 مساءً</p>
+                        <p><i class="fas fa-laugh"></i> محتوى مضحك جداً</p>
+                        <p><i class="fas fa-microphone"></i> بث مباشر حي مع الجميع</p>
                     </div>
                     <a href="#" class="event-btn">شارك معنا</a>
                 </div>
-
                 <div class="event-card">
-                    <div class="event-header">تحدي الألعاب</div>
+                    <div class="event-header">⚡ تحدي الألعاب الشامل</div>
                     <div class="event-body">
-                        <p><i class="fas fa-calendar"></i> نهاية الأسبوع</p>
-                        <p><i class="fas fa-gamepad"></i> ألعاب متعددة</p>
-                        <p><i class="fas fa-gift"></i> هدايا رائعة</p>
+                        <p><i class="fas fa-calendar-alt"></i> نهاية الأسبوع السبت والأحد</p>
+                        <p><i class="fas fa-gamepad"></i> ألعاب متعددة ومختلفة</p>
+                        <p><i class="fas fa-gift"></i> هدايا رائعة وحصرية</p>
                     </div>
                     <a href="#" class="event-btn">تنافس الآن</a>
                 </div>
-
                 <div class="event-card">
-                    <div class="event-header">بطولة Minecraft</div>
+                    <div class="event-header">👑 بطولة Minecraft الشهرية</div>
                     <div class="event-body">
-                        <p><i class="fas fa-calendar"></i> شهري</p>
-                        <p><i class="fas fa-crown"></i> بطل الشهر</p>
-                        <p><i class="fas fa-medal"></i> رتب خاصة</p>
+                        <p><i class="fas fa-calendar-alt"></i> آخر أسبوع من الشهر</p>
+                        <p><i class="fas fa-crown"></i> بطل الشهر يحصل على جوائز</p>
+                        <p><i class="fas fa-medal"></i> رتب خاصة وألقاب حصرية</p>
                     </div>
                     <a href="#" class="event-btn">شارك في البطولة</a>
                 </div>
@@ -177,41 +776,41 @@
     <!-- Roles Section -->
     <section id="roles" class="roles">
         <div class="container">
-            <h2 class="section-title">نظام الأدوار والحقوق</h2>
+            <h2 class="section-title">🎖️ نظام الأدوار والحقوق والصلاحيات</h2>
             <div class="roles-table">
                 <table>
                     <thead>
                         <tr>
-                            <th>الدور</th>
+                            <th>الدور والرتبة</th>
                             <th>الحقوق الأساسية</th>
-                            <th>المزايا</th>
+                            <th>المزايا والامتيازات الخاصة</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span class="role-badge admin">مدير</span></td>
-                            <td>صلاحيات كاملة</td>
-                            <td>إدارة السيرفر، إضافة فعاليات، تعديل الأدوار</td>
+                            <td><span class="role-badge admin">👑 مدير عام</span></td>
+                            <td>صلاحيات كاملة مطلقة</td>
+                            <td>إدارة السيرفر كاملاً، إضافة فعاليات، تعديل الأدوار، Hex خاص</td>
                         </tr>
                         <tr>
-                            <td><span class="role-badge moderator">مشرف</span></td>
-                            <td>إدارة الأعضاء</td>
-                            <td>حذف الرسائل، إبعاد الأعضاء، إدارة الفعاليات</td>
+                            <td><span class="role-badge moderator">🛡️ مشرف</span></td>
+                            <td>إدارة الأعضاء والرسائل</td>
+                            <td>حذف الرسائل، إبعاد الأعضاء، إدارة الفعاليات، Hex مميز</td>
                         </tr>
                         <tr>
-                            <td><span class="role-badge submoderator">مشرف فرعي</span></td>
-                            <td>مساعدة الإشراف</td>
-                            <td>مراقبة الفعاليات، مساعدة الأعضاء</td>
+                            <td><span class="role-badge submoderator">⚙️ مشرف فرعي</span></td>
+                            <td>مساعدة الإشراف الأساسي</td>
+                            <td>مراقبة الفعاليات، مساعدة الأعضاء، أولوية في الرسائل</td>
                         </tr>
                         <tr>
-                            <td><span class="role-badge vip">VIP</span></td>
-                            <td>امتيازات خاصة</td>
-                            <td>ألوان خاصة، أولوية في الفعاليات، Hex مخصص</td>
+                            <td><span class="role-badge vip">💎 VIP/Hex</span></td>
+                            <td>امتيازات خاصة جداً</td>
+                            <td>ألوان خاصة وحصرية، أولوية في الفعاليات، Hex مخصص شخصي</td>
                         </tr>
                         <tr>
-                            <td><span class="role-badge member">عضو</span></td>
-                            <td>حقوق عادية</td>
-                            <td>المشاركة في الألعاب والفعاليات</td>
+                            <td><span class="role-badge member">👤 عضو عادي</span></td>
+                            <td>حقوق عادية أساسية</td>
+                            <td>المشاركة في الألعاب والفعاليات والاستمتاع</td>
                         </tr>
                     </tbody>
                 </table>
@@ -224,19 +823,19 @@
         <div class="container">
             <div class="stat-card">
                 <h3>1000+</h3>
-                <p>عضو نشط</p>
+                <p>عضو نشط ومتفاعل</p>
             </div>
             <div class="stat-card">
                 <h3>50+</h3>
-                <p>فعالية شهرية</p>
+                <p>فعالية شهرية حصرية</p>
             </div>
             <div class="stat-card">
                 <h3>6</h3>
-                <p>ألعاب متاحة</p>
+                <p>ألعاب متاحة ومتطورة</p>
             </div>
             <div class="stat-card">
                 <h3>24/7</h3>
-                <p>دعم فني</p>
+                <p>دعم فني احترافي</p>
             </div>
         </div>
     </section>
@@ -247,7 +846,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>Nova Server</h4>
-                    <p>أفضل تجربة ديسكورد عربية</p>
+                    <p>أفضل وأجمل تجربة ديسكورد عربية على الإطلاق 🚀</p>
                 </div>
                 <div class="footer-section">
                     <h4>الروابط السريعة</h4>
@@ -255,23 +854,23 @@
                         <li><a href="#home">الرئيسية</a></li>
                         <li><a href="#games">الألعاب</a></li>
                         <li><a href="#events">الفعاليات</a></li>
+                        <li><a href="#roles">الأدوار</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>تابعنا</h4>
+                    <h4>تابعنا على السوشيال</h4>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-discord"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Nova Server | جميع الحقوق محفوظة</p>
+                <p>&copy; 2026 Nova Server | جميع الحقوق محفوظة © جميع الحقوق محفوظة لـ Nova</p>
             </div>
         </div>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
